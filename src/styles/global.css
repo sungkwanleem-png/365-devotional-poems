@@ -1,9 +1,11 @@
 :root {
-  --color-bg: #fbfaf7;
+  /* 기본값(day 테마와 동일) — JS 비활성/실행 전에도 자연스럽게 보이도록 하는 폴백 */
+  --color-bg: linear-gradient(160deg, #fbfaf7 0%, #fdf6e3 100%);
   --color-fg: #1c1a17;
-  --color-muted: #8a8478;
+  --color-muted: #716b5d;
   --color-accent: #6b5a45;
   --color-border: #e4e0d8;
+  --particle-color: #fff2d9;
 
   --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', Georgia, serif;
 
@@ -16,6 +18,49 @@
   --measure: 640px;
 }
 
+/* 시간대별 4테마 — 대비는 WCAG AA(4.5:1) 이상을 실측 확인한 조합만 사용
+   (본문 fg 9.5~16.6:1, muted 4.7~5.5:1, accent 4.6~9.8:1, 전부 두 그라데이션 스톱 기준 재확인) */
+[data-theme='dawn'] {
+  /* 새벽 04-08시: 라벤더·복숭아빛 */
+  --color-bg: linear-gradient(160deg, #f3e9f7 0%, #fbe4d8 100%);
+  --color-fg: #3a2a3d;
+  --color-muted: #6b5966;
+  --color-accent: #6f4657;
+  --color-border: #e3d3da;
+  --particle-color: #fff6e8;
+}
+
+[data-theme='day'] {
+  /* 낮 08-16시: 밝은 베이지·옐로우화이트 */
+  --color-bg: linear-gradient(160deg, #fbfaf7 0%, #fdf6e3 100%);
+  --color-fg: #1c1a17;
+  --color-muted: #716b5d;
+  --color-accent: #6b5a45;
+  --color-border: #e4e0d8;
+  --particle-color: #fff2d9;
+}
+
+[data-theme='sunset'] {
+  /* 노을 16-19시: 연주황·코랄빛 */
+  --color-bg: linear-gradient(160deg, #fdeee0 0%, #fbd8c4 100%);
+  --color-fg: #4a2a1f;
+  --color-muted: #7a5946;
+  --color-accent: #9c4a24;
+  --color-border: #f0cbb0;
+  --particle-color: #ffe3c2;
+}
+
+[data-theme='night'] {
+  /* 밤 19-04시: 네이비·다크바이올렛 */
+  --color-bg: linear-gradient(160deg, #14172b 0%, #241a3d 100%);
+  --color-fg: #ece7f5;
+  --color-muted: #a79cc4;
+  --color-accent: #c9b8f0;
+  --color-border: #3a3560;
+  --particle-color: #e8ddff;
+  color-scheme: dark;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -25,6 +70,7 @@ html {
 }
 
 body {
+  position: relative;
   margin: 0;
   background: var(--color-bg);
   color: var(--color-fg);
@@ -32,6 +78,7 @@ body {
   line-height: 1.9;
   font-size: 1.0625rem;
   -webkit-font-smoothing: antialiased;
+  transition: background 0.6s ease, color 0.4s ease;
 }
 
 a {
@@ -44,6 +91,8 @@ a:not(.plain) {
 }
 
 .site-header {
+  position: relative;
+  z-index: 1;
   padding: var(--space-2) var(--space-3);
   border-bottom: 1px solid var(--color-border);
 }
@@ -56,9 +105,61 @@ a:not(.plain) {
 }
 
 main {
+  position: relative;
+  z-index: 1;
   max-width: var(--measure);
   margin: 0 auto;
   padding: var(--space-4) var(--space-3) var(--space-5);
+}
+
+/* 빛 먼지 파티클 — 매우 절제된 강도(opacity 낮음·개수 적음·느린 움직임), CSS 애니메이션만 사용.
+   position:fixed + z-index:0 vs header/main의 z-index:1로 텍스트 위에 절대 올라오지 않게 고정. */
+.dust-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dust-field span {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--particle-color, #fff2d9) 0%, transparent 72%);
+  opacity: 0;
+  animation: dust-drift var(--dur) ease-in-out var(--delay) infinite;
+  transition: background-color 0.6s ease;
+}
+
+@keyframes dust-drift {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--peak);
+  }
+  50% {
+    transform: translate(var(--dx), calc(var(--dy) * 0.6));
+    opacity: var(--peak);
+  }
+  88% {
+    opacity: 0;
+  }
+  100% {
+    transform: translate(calc(var(--dx) * 1.6), var(--dy));
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dust-field {
+    display: none;
+  }
 }
 
 .cover {

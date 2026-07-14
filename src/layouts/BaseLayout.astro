@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import DustParticles from '../components/DustParticles.astro';
 
 interface Props {
   title: string;
@@ -14,8 +15,30 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <script is:inline>
+      // 방문 시각(로컬) 기준 4구간 테마 자동 전환.
+      // ?theme=dawn|day|sunset|night 쿼리로 강제 override 가능(테스트·데모용).
+      // <head>에서 동기 실행되어 body 페인트 전에 data-theme이 확정되므로 FOUC 없음.
+      (function () {
+        function themeForHour(h) {
+          if (h >= 4 && h < 8) return 'dawn';
+          if (h >= 8 && h < 16) return 'day';
+          if (h >= 16 && h < 19) return 'sunset';
+          return 'night';
+        }
+        var VALID = ['dawn', 'day', 'sunset', 'night'];
+        var params = new URLSearchParams(window.location.search);
+        var override = params.get('theme');
+        var theme =
+          override && VALID.indexOf(override) !== -1
+            ? override
+            : themeForHour(new Date().getHours());
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
   </head>
   <body>
+    <DustParticles />
     <header class="site-header">
       <a href="/">365일 말씀 묵상 시집</a>
     </header>
