@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DayNav from '../../components/DayNav.astro';
+
+export async function getStaticPaths() {
+  const allDays = await getCollection('days');
+  const dayNumbers = new Set(allDays.map((d) => d.data.day));
+
+  return allDays.map((entry) => {
+    const { day } = entry.data;
+    return {
+      params: { day: String(day) },
+      props: {
+        entry,
+        prevDay: dayNumbers.has(day - 1) ? day - 1 : undefined,
+        nextDay: dayNumbers.has(day + 1) ? day + 1 : undefined,
+      },
+    };
+  });
+}
+
+const { entry, prevDay, nextDay } = Astro.props;
+const { title, scriptureRef, scriptureText, scriptureVersion, afterword, day } = entry.data;
+const dayLabel = String(day).padStart(3, '0');
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={`Day ${dayLabel}. ${title}`}>
+  <h1 class="day-title">Day {dayLabel}. {title}</h1>
+
+  <div class="scripture">
+    <p class="ref">{scriptureRef}</p>
+    <p class="text">{scriptureText.trim()}</p>
+    <p class="version">({scriptureVersion})</p>
+  </div>
+
+  <div class="poem">
+    <Content />
+  </div>
+
+  <p class="afterword">짧은 여운 — {afterword.trim()}</p>
+
+  <DayNav prevDay={prevDay} nextDay={nextDay} />
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { months } from '../data/months';
+
+const allDays = (await getCollection('days')).sort((a, b) => a.data.day - b.data.day);
+---
+
+<BaseLayout title="목차 — 365일 말씀 묵상 시집">
+  <h1 class="day-title">목차</h1>
+  {
+    months.map((m) => {
+      const daysInMonth = allDays.filter((d) => d.data.month === m.month);
+      return (
+        <section class="toc-month">
+          <h2>{m.month}월 — {m.theme}</h2>
+          <p class="range">{m.bibleRange} · {daysInMonth.length}편 공개</p>
+          {daysInMonth.length > 0 ? (
+            <ul class="toc-list">
+              {daysInMonth.map((d) => (
+                <li>
+                  <a href={`/day/${d.data.day}`}>
+                    Day {String(d.data.day).padStart(3, '0')}. {d.data.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="toc-list inactive">아직 공개된 글이 없습니다.</p>
+          )}
+        </section>
+      );
+    })
+  }
+</BaseLayout>

@@ -1,0 +1,20 @@
+---
+interface Props {
+  prevDay?: number;
+  nextDay?: number;
+}
+
+const { prevDay, nextDay } = Astro.props;
+---
+
+<nav class="day-nav">
+  <span>
+    {prevDay && <a href={`/day/${prevDay}`}>&larr; 이전 날</a>}
+  </span>
+  <span class="center">
+    <a href="/toc">목차로</a>
+  </span>
+  <span>
+    {nextDay && <a href={`/day/${nextDay}`}>다음 날 &rarr;</a>}
+  </span>
+</nav>

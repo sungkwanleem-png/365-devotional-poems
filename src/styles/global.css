@@ -1,0 +1,188 @@
+:root {
+  --color-bg: #fbfaf7;
+  --color-fg: #1c1a17;
+  --color-muted: #8a8478;
+  --color-accent: #6b5a45;
+  --color-border: #e4e0d8;
+
+  --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', Georgia, serif;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.75rem;
+  --space-4: 3rem;
+  --space-5: 5rem;
+
+  --measure: 640px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-serif);
+  line-height: 1.9;
+  font-size: 1.0625rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-accent);
+}
+
+a:not(.plain) {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.site-header {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header a {
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+main {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3) var(--space-5);
+}
+
+.cover {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+}
+
+.cover h1 {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 600;
+  margin: 0;
+}
+
+.cover p {
+  color: var(--color-muted);
+  max-width: 32ch;
+  margin: 0;
+}
+
+.toc-month {
+  margin-bottom: var(--space-4);
+}
+
+.toc-month h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.2rem;
+}
+
+.toc-month .range {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  margin: 0 0 var(--space-2);
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-list li {
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.toc-list a {
+  text-decoration: none;
+}
+
+.toc-list .inactive {
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.day-title {
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  font-weight: 600;
+  margin: 0 0 var(--space-3);
+}
+
+.scripture {
+  border-left: 3px solid var(--color-border);
+  padding-left: var(--space-2);
+  margin: 0 0 var(--space-4);
+  color: var(--color-accent);
+}
+
+.scripture .ref {
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+}
+
+.scripture .text {
+  white-space: pre-line;
+  margin: 0 0 0.4rem;
+}
+
+.scripture .version {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.poem {
+  white-space: pre-line;
+  margin: 0 0 var(--space-4);
+}
+
+.afterword {
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--color-muted);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+  white-space: pre-line;
+}
+
+.day-nav {
+  margin-top: var(--space-5);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+  font-size: 0.9rem;
+}
+
+.day-nav .center {
+  flex: 1;
+  text-align: center;
+}
+
+.day-nav a {
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: var(--space-3) var(--space-2) var(--space-4);
+  }
+}
